@@ -46,3 +46,4 @@ All other functionality is / will be done locally within the Godot engine.
 	- Some kind of special powers that maintain educational value but enable the roguelite feeling
 		- Thinking maybe a scoring system like balatro? Like "+$500 every time a stereocenter is flipped" and you get to use X reagents Y times
 	- Up in the air rn - just want to get fundamentals up and running
+	- For when a reaction has multiple products, include animation of a random selection of one of those products
