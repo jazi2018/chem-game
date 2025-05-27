@@ -1,9 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://orah0t3fhtvi"]
+[gd_scene load_steps=4 format=3 uid="uid://orah0t3fhtvi"]
 
 [ext_resource type="Script" uid="uid://bdmcq68fb056e" path="res://scripts/molecule_handler.gd" id="1_rnyix"]
+[ext_resource type="PackedScene" uid="uid://bef5el30jpelh" path="res://scenes/resources/Atom.tscn" id="2_n8fgq"]
+[ext_resource type="PackedScene" uid="uid://boy0ncxheqj6y" path="res://scenes/resources/Bond.tscn" id="3_o2mce"]
 
 [node name="MoleculeHandler" type="Node2D"]
 script = ExtResource("1_rnyix")
+atom_scene = ExtResource("2_n8fgq")
+bond_scene = ExtResource("3_o2mce")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 

@@ -5,7 +5,7 @@ var symbol: String = "C" #carbon by default
 var index: int = 0
 var color: Color = Color.BLACK
 
-func _init(symb: String, idx: int) -> void:
+func setup(symb: String, idx: int) -> void:
 	symbol = symb
 	index = idx
 
