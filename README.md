@@ -26,16 +26,16 @@ All other functionality is / will be done locally within the Godot engine.
 ## TODO
 - Implement Atom and Bond node for better visuals and more extensible code
 	- Atom node functionality:
-		- Extends Node2D - relative position is important
+		- ~~Extends Node2D - relative position is important~~
 		- Visual clarity
 		- Animations
 		- Varying colors for different elements
 	- Bond node functionality:
-		- Extends Line2D
-		- Connected to neigboring atoms
-		- Remains connected when atom moves (for animations)
+		- ~~Extends Line2D~~
+		- ~~Connected to neigboring atoms~~
+		- ~~Remains connected when atom moves (for animations)~~
 		- Eventually need to implement stereochemistry (can just adjust thickness over length for wedge)
-	- Children of Molecule, which should act as a container for atoms and bonds and store SMILE for whole molecule
+	- Children of MoleculeRoot, which should ~~act as a container for atoms and bonds~~ and store SMILE for whole molecule
 - Implement chemical reactions
 	- Utilize reaction SMILES in RDKit
 	- Cover reactions from Ochem 1 - potentially implement more later
