@@ -3,14 +3,25 @@ class_name Atom
 
 var symbol: String = "C" #carbon by default
 var index: int = 0
+#rendering variables
 var color: Color = Color.BLACK
+var is_carbon: bool = true #carbon flag
+
+@onready var label: Label = $Label
 
 func setup(symb: String, idx: int) -> void:
 	symbol = symb
+	if symbol != "C":
+		is_carbon = false
 	index = idx
+	set_color()
 
 func _ready() -> void:
-	set_color()
+	#label atom if not carbon
+	if not is_carbon:
+		label.visible = true
+		label.set_text(symbol)
+		label.add_theme_color_override("font_color", color)
 
 func set_color() -> void:
 	#assess only first 2 characters of symbol
@@ -30,3 +41,8 @@ func set_color() -> void:
 
 func get_color() -> Color:
 	return color
+
+func get_label_radius() -> float:
+	var size = label.get_minimum_size()
+	#centered, so * 0.6 for slightly larger than text cutoff
+	return max(size.x, size.y) * 0.5

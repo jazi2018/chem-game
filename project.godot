@@ -11,6 +11,6 @@ config_version=5
 [application]
 
 config/name="Chem Balatro"
-run/main_scene="uid://ddiuytpd3hqrj"
+run/main_scene="uid://bh31crkfgjt2w"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"

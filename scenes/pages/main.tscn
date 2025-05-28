@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddiuytpd3hqrj"]
+[gd_scene load_steps=2 format=3 uid="uid://bh31crkfgjt2w"]
 
 [ext_resource type="PackedScene" uid="uid://orah0t3fhtvi" path="res://scenes/resources/MoleculeHandler.tscn" id="1_plq1a"]
 

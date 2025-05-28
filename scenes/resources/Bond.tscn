@@ -2,5 +2,11 @@
 
 [ext_resource type="Script" uid="uid://c3sdk56s03cqh" path="res://scripts/bond.gd" id="1_i72gj"]
 
-[node name="Bond" type="Line2D"]
+[node name="Bond" type="Node2D"]
 script = ExtResource("1_i72gj")
+
+[node name="Start" type="Line2D" parent="."]
+width = 3.0
+
+[node name="End" type="Line2D" parent="."]
+width = 3.0

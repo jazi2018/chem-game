@@ -56,9 +56,7 @@ func render_molecule(atoms_data: Array, bonds_data: Array, scale: float = 40.0) 
 		var i2: int = bond_info["end"]
 		var order: float = bond_info.get("order", 1.0)
 		#instantiate bond
-		var bond = bond_scene.instantiate() as Line2D
+		var bond = bond_scene.instantiate() as Node2D
 		bond.setup(atom_list[i1], atom_list[i2])
-		bond.setup_line()
+		#bond.setup_line()
 		molecule_root.add_child(bond)
-
-		
