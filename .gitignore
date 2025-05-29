@@ -17,3 +17,6 @@ mono_crash.*.json
 
 # Pycache
 python_scripts/__pycache__
+
+#temporary files
+*.tmp
