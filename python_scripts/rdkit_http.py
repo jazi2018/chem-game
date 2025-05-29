@@ -18,57 +18,47 @@ def parse_smiles(smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         raise ValueError("Invalid SMILES string")
-    mol = Chem.AddHs(mol) #adds ALL hydrogens - will filter them out later
     AllChem.Compute2DCoords(mol)
 
-    include = set()
-    #determine which atoms to include
-    for atom in mol.GetAtoms():
+    mol_with_h = Chem.AddHs(mol) #add hydrogens to different molecules
+    h_counts = {}
+    for atom in mol_with_h.GetAtoms(): #get hydrogen counts on each non hydrogen atom - store in dict
         if atom.GetSymbol() != 'H':
-            include.add(atom.GetIdx())
-        else:
-            #only add if not attached to a carbon
-            neighbors = atom.GetNeighbors()
-            if neighbors and neighbors[0].GetSymbol() != 'C':
-                include.add(atom.GetIdx())
+            idx = atom.GetIdx()
+            h_count = sum(1 for n in atom.GetNeighbors() if n.GetSymbol() == 'H')
+            h_counts[idx] = h_count
+
+    #set symbol to include hydrogens
+    #TODO: Still need to implement fully - possibly need to include stereochem but we'll get there
 
     atoms = []
     for atom in mol.GetAtoms():
-        #filter out non-included atoms
         idx = atom.GetIdx()
-        if idx not in include:
-            continue
-        
-        #set symbol to include hydrogens
-        #TODO: Still need to implement fully - possibly need to include stereochem but we'll get there
-        # symbol = atom.GetSymbol()
-        # hydrogens = sum(1 for n in atom.GetNeighbors() if n.GetSymbol() == 'H')
-        # if symbol != 'H' and hydrogens:
-        #     symbol = f"{symbol}(H{hydrogens if hydrogens > 1 else ''})"
-
-        pos = mol.GetConformer().GetAtomPosition(atom.GetIdx())
+        symbol = atom.GetSymbol()
+        h_count = h_counts.get(idx, 0) #get h count from dict - lets geometry ignore H count but still be recalled for symbol
+        if h_count and symbol != 'C':
+            symbol += f"H[sub]{h_count}[/sub]" if h_count > 1 else "H" #format with bbcode for godot
+        pos = mol.GetConformer().GetAtomPosition(idx)
         atoms.append({
-            'symbol': atom.GetSymbol(),
+            'symbol': symbol,
             'x': pos.x,
             'y': pos.y,
-            'index': atom.GetIdx()
+            'index': idx
         })
     
     bonds = []
     for bond in mol.GetBonds():
         bgn = bond.GetBeginAtomIdx()
         end = bond.GetEndAtomIdx()
-        #filter out omitted atom bonds
-        if bgn in include and end in include:
-            bonds.append({
-                'begin': bgn,
-                'end': end,
-                'order': bond.GetBondTypeAsDouble()
-            })
+        bonds.append({
+            'begin': bgn,
+            'end': end,
+            'order': bond.GetBondTypeAsDouble()
+        })
     
     #DEBUG:
-    print(atoms)
-    print(f'\n{bonds}')
+    # print(atoms)
+    # print(f'\n{bonds}')
     
     return {'atoms': atoms, 'bonds': bonds}
 

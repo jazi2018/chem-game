@@ -7,7 +7,7 @@ var index: int = 0
 var color: Color = Color.BLACK
 var is_carbon: bool = true #carbon flag
 
-@onready var label: Label = $Label
+@onready var label : RichTextLabel = $Label
 
 func setup(symb: String, idx: int) -> void:
 	symbol = symb
@@ -17,27 +17,34 @@ func setup(symb: String, idx: int) -> void:
 	set_color()
 
 func _ready() -> void:
-	#label atom if not carbon
+	#label atom if not carbon and apply subscript affects
+	label.install_effect(preload("res://scripts/subscript.gd").new())
 	if not is_carbon:
-		label.visible = true
 		label.set_text(symbol)
-		label.add_theme_color_override("font_color", color)
+		label.add_theme_color_override("default_color", color)
 
 func set_color() -> void:
 	#assess only first 2 characters of symbol
-	var temp = symbol
 	if len(symbol) > 1:
-		temp = symbol.left(2)
+		var temp = symbol[0]
 	
-	match temp:
-		'C' : color = Color.BLACK
-		'N' : color = Color.BLUE
-		'O' : color = Color.RED
-		'S' : color = Color.YELLOW
-		'Cl' : color = Color.GREEN
-		'Br' : color = Color.BROWN
-		'I' : color = Color.REBECCA_PURPLE
-		_ : color = Color.BLACK
+		match temp:
+			'C' : color = Color.GREEN #Cl
+			'B' : color = Color.BROWN #Br
+			'N' : color = Color.BLUE #N / NH / ...
+			'O' : color = Color.RED #O / OH
+			'S' : color = Color.YELLOW # S / SH / ...
+			'I' : color = Color.REBECCA_PURPLE # I / IH? / ...
+			_ : color = Color.BLACK
+	
+	else:
+		match symbol:
+			'C' : color = Color.BLACK
+			'N' : color = Color.BLUE
+			'O' : color = Color.RED
+			'S' : color = Color.YELLOW
+			'I' : color = Color.REBECCA_PURPLE
+			_ : color = Color.BLACK
 
 func get_color() -> Color:
 	return color

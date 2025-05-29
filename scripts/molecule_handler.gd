@@ -10,7 +10,7 @@ extends Node2D
 
 func _ready() -> void:
 	#TEMP SMILES TEST
-	var body = JSON.stringify({"smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C"})
+	var body = JSON.stringify({"smiles": "C([C@@H](C(=O)O)N)S"})
 	var headers = ["Content-Type: application/json"]
 	http.request("http://127.0.0.1:8000/parse", headers, HTTPClient.METHOD_POST, body) 
 
