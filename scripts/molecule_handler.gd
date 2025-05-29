@@ -10,7 +10,7 @@ extends Node2D
 
 func _ready() -> void:
 	#TEMP SMILES TEST
-	var body = JSON.stringify({"smiles": "C([C@@H](C(=O)O)N)S"})
+	var body = JSON.stringify({"smiles": "NC(CS)C(O)=O"})
 	var headers = ["Content-Type: application/json"]
 	http.request("http://127.0.0.1:8000/parse", headers, HTTPClient.METHOD_POST, body) 
 
@@ -39,9 +39,7 @@ func render_molecule(atoms_data: Array, bonds_data: Array, scale: float = 40.0) 
 
 	for atom_info in atoms_data:
 		var idx: int = atom_info["index"]
-		print("idx: ", idx)
 		var symbol: String = atom_info["symbol"]
-		print("symbol: ", symbol)
 		var pos: Vector2 = Vector2(atom_info["x"], -atom_info["y"]) * scale
 		
 		var atom = atom_scene.instantiate() as Node2D
@@ -54,9 +52,11 @@ func render_molecule(atoms_data: Array, bonds_data: Array, scale: float = 40.0) 
 	for bond_info in bonds_data:
 		var i1: int = bond_info["begin"]
 		var i2: int = bond_info["end"]
-		var order: float = bond_info.get("order", 1.0)
+		var order: float = int(bond_info.get("order", 1.0))
+		#ensure correct type of bond based on order
+		for i in range(order):
+			var bond = bond_scene.instantiate() as Node2D
+			bond.setup(atom_list[i1], atom_list[i2], i, order)
+			molecule_root.add_child(bond)
 		#instantiate bond
-		var bond = bond_scene.instantiate() as Node2D
-		bond.setup(atom_list[i1], atom_list[i2])
-		#bond.setup_line()
-		molecule_root.add_child(bond)
+		

@@ -2,17 +2,18 @@ extends Node2D
 
 var start_atom: Atom
 var end_atom: Atom
+var offset_idx: int = 0
+var bond_order: int = 1
 @onready var start: Line2D = $Start
 @onready var end: Line2D = $End
-#var bond_order: int = 1
-#var gradient := Gradient.new()
-#set gradient interpolation_mode to Gradient.INTERP_CONSTANT
-#then add_point at 0.5 (halfway thru the line) and set color to relevant color on each side
 
-func setup(from: Atom, to: Atom) -> void: #order: int = 1
+@export var spacing: float = 6.0
+
+func setup(from: Atom, to: Atom, offset: int, order: int = 1) -> void: #order: int = 1
 	start_atom = from
 	end_atom = to
-	#bond_order = order
+	offset_idx = offset
+	bond_order = order
 
 func _ready() -> void:
 	start.default_color = start_atom.get_color()
@@ -24,16 +25,25 @@ func setup_line() -> void:
 	var start_radius = 0.0 if start_atom.is_carbon else start_atom.get_label_radius()
 	var end_radius = 0.0 if end_atom.is_carbon else end_atom.get_label_radius()
 	var uv := (end_atom.position - start_atom.position).normalized()
+	var normal := Vector2(-uv.y, uv.x)
 	
+	var offset := 0.0
+	#calculate offset
+	if bond_order == 2:
+		offset = spacing * (offset_idx * 2 - 1) * 0.5 #[-spacing/2, spacing/2]
+	elif bond_order == 3:
+		offset = spacing * (offset_idx - 1) #[-spacing, 0, spacing]
+	
+	var perp_offset = normal * offset
 	#first line
 	start.clear_points()
-	start.add_point(start_atom.position + uv * start_radius)
-	start.add_point(midpoint)
+	start.add_point(start_atom.position + uv * start_radius + perp_offset)
+	start.add_point(midpoint + perp_offset)
 	
 	#second line
 	end.clear_points()
-	end.add_point(midpoint)
-	end.add_point(end_atom.position - uv * end_radius)
+	end.add_point(midpoint + perp_offset)
+	end.add_point(end_atom.position - uv * end_radius + perp_offset)
 
 func _process(_delta: float) -> void:
 	#self.points = [
@@ -42,4 +52,6 @@ func _process(_delta: float) -> void:
 	#]
 	setup_line() #NOTE: CHANGE THIS AT SOME POINT - this is a TEMPORARY FIX for testing
 	#should only be run WHEN THE ATOM IS MOVED LOL
+	#NOTE: Maybe add a setting at some point that can disable moving atoms for computers
+	#that are not very performative
 	pass
