@@ -3,13 +3,13 @@ extends Node2D
 var start_atom: Atom
 var end_atom: Atom
 var offset_idx: int = 0
-var bond_order: int = 1
+var bond_order: float = 1.0
 @onready var start: Line2D = $Start
 @onready var end: Line2D = $End
 
 @export var spacing: float = 6.0
 
-func setup(from: Atom, to: Atom, offset: int, order: int = 1) -> void: #order: int = 1
+func setup(from: Atom, to: Atom, offset: int, order: float = 1.0) -> void:
 	start_atom = from
 	end_atom = to
 	offset_idx = offset
@@ -21,7 +21,6 @@ func _ready() -> void:
 	setup_line()
 
 func setup_line() -> void:
-	var midpoint := (start_atom.position + end_atom.position) * 0.5
 	var start_radius = 0.0 if start_atom.is_carbon else start_atom.get_label_radius()
 	var end_radius = 0.0 if end_atom.is_carbon else end_atom.get_label_radius()
 	var uv := (end_atom.position - start_atom.position).normalized()
@@ -29,11 +28,12 @@ func setup_line() -> void:
 	
 	var offset := 0.0
 	#calculate offset
-	if bond_order == 2:
+	if bond_order == 2.0:
 		offset = spacing * (offset_idx * 2 - 1) * 0.5 #[-spacing/2, spacing/2]
-	elif bond_order == 3:
+	elif bond_order == 3.0:
 		offset = spacing * (offset_idx - 1) #[-spacing, 0, spacing]
 	
+	var midpoint := (start_atom.position + end_atom.position) * 0.5
 	var perp_offset = normal * offset
 	#first line
 	start.clear_points()

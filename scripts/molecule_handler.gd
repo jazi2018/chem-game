@@ -10,7 +10,7 @@ extends Node2D
 
 func _ready() -> void:
 	#TEMP SMILES TEST
-	var body = JSON.stringify({"smiles": "NC(CS)C(O)=O"})
+	var body = JSON.stringify({"smiles": "C[C@H](F)Cl"})
 	var headers = ["Content-Type: application/json"]
 	http.request("http://127.0.0.1:8000/parse", headers, HTTPClient.METHOD_POST, body) 
 
@@ -52,11 +52,9 @@ func render_molecule(atoms_data: Array, bonds_data: Array, scale: float = 40.0) 
 	for bond_info in bonds_data:
 		var i1: int = bond_info["begin"]
 		var i2: int = bond_info["end"]
-		var order: float = int(bond_info.get("order", 1.0))
+		var order: float = bond_info.get("order", 1.0)
 		#ensure correct type of bond based on order
-		for i in range(order):
+		for i in range(int(order)):
 			var bond = bond_scene.instantiate() as Node2D
 			bond.setup(atom_list[i1], atom_list[i2], i, order)
 			molecule_root.add_child(bond)
-		#instantiate bond
-		

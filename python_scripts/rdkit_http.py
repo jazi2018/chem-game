@@ -15,12 +15,18 @@ class SmilesInput(BaseModel):
     smiles: str
 
 def parse_smiles(smiles):
+    #parse molecule from smiles
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         raise ValueError("Invalid SMILES string")
+    
+    #compute 2d coords for rendering
     AllChem.Compute2DCoords(mol)
 
-    mol_with_h = Chem.AddHs(mol) #add hydrogens to different molecules
+    #kekulize if possible
+    Chem.KekulizeIfPossible(mol, clearAromaticFlags=True)
+
+    mol_with_h = Chem.AddHs(mol) #add hydrogens to a different molecule
     h_counts = {}
     for atom in mol_with_h.GetAtoms(): #get hydrogen counts on each non hydrogen atom - store in dict
         if atom.GetSymbol() != 'H':
@@ -28,7 +34,6 @@ def parse_smiles(smiles):
             h_count = sum(1 for n in atom.GetNeighbors() if n.GetSymbol() == 'H')
             h_counts[idx] = h_count
 
-    #set symbol to include hydrogens
     #TODO: Still need to implement fully - possibly need to include stereochem but we'll get there
 
     atoms = []
@@ -45,15 +50,16 @@ def parse_smiles(smiles):
             'y': pos.y,
             'index': idx
         })
-    
+
     bonds = []
     for bond in mol.GetBonds():
+        order = bond.GetBondTypeAsDouble()
         bgn = bond.GetBeginAtomIdx()
         end = bond.GetEndAtomIdx()
         bonds.append({
             'begin': bgn,
             'end': end,
-            'order': bond.GetBondTypeAsDouble()
+            'order': order
         })
     
     #DEBUG:
