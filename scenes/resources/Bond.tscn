@@ -11,3 +11,7 @@ texture_mode = 1
 
 [node name="End" type="Line2D" parent="."]
 width = 3.0
+
+[node name="stereochem_debug" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

@@ -13,3 +13,7 @@ config_version=5
 config/name="Chem Balatro"
 run/main_scene="uid://bh31crkfgjt2w"
 config/features=PackedStringArray("4.4", "Forward Plus")
+
+[rendering]
+
+textures/canvas_textures/default_texture_repeat=1

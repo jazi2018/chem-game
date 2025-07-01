@@ -1,6 +1,8 @@
 #SMILES parsing
 from rdkit import Chem
 from rdkit.Chem import AllChem
+from rdkit.Chem.rdchem import BondDir
+from rdkit.Chem import Draw
 
 #http requests
 from fastapi import FastAPI, HTTPException
@@ -21,10 +23,11 @@ def parse_smiles(smiles):
         raise ValueError("Invalid SMILES string")
     
     #compute 2d coords for rendering
-    AllChem.Compute2DCoords(mol)
-
+    #AllChem.Compute2DCoords(mol)
+    #AllChem.AssignStereochemistry(mol, cleanIt=True, force=True)
+    mol = Draw.rdMolDraw2D.PrepareMolForDrawing(mol)
     #kekulize if possible
-    Chem.KekulizeIfPossible(mol, clearAromaticFlags=True)
+    #Chem.KekulizeIfPossible(mol, clearAromaticFlags=True)
 
     mol_with_h = Chem.AddHs(mol) #add hydrogens to a different molecule
     h_counts = {}
@@ -35,6 +38,8 @@ def parse_smiles(smiles):
             h_counts[idx] = h_count
 
     #TODO: Still need to implement fully - possibly need to include stereochem but we'll get there
+    #assign stereochem to ensure wedges and dashes are applied correctly
+    
 
     atoms = []
     for atom in mol.GetAtoms():
@@ -56,10 +61,19 @@ def parse_smiles(smiles):
         order = bond.GetBondTypeAsDouble()
         bgn = bond.GetBeginAtomIdx()
         end = bond.GetEndAtomIdx()
+        direction = bond.GetBondDir()
+        match direction: #stereo is enumerated in godot
+            case BondDir.BEGINWEDGE:
+                stereo = 1
+            case BondDir.BEGINDASH:
+                stereo = 2
+            case _:
+                stereo = 0
         bonds.append({
             'begin': bgn,
             'end': end,
-            'order': order
+            'order': order,
+            'stereo': stereo
         })
     
     #DEBUG:

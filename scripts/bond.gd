@@ -4,16 +4,29 @@ var start_atom: Atom
 var end_atom: Atom
 var offset_idx: int = 0
 var bond_order: float = 1.0
+var stereo: LineType = LineType.NONE
+enum LineType {NONE, WEDGE, DASH}
 @onready var start: Line2D = $Start
 @onready var end: Line2D = $End
 
+#DEBUG
+@onready var debug_label: Label = $stereochem_debug
+#DEBUG
+
 @export var spacing: float = 6.0
 
-func setup(from: Atom, to: Atom, offset: int, order: float = 1.0) -> void:
+func setup(from: Atom, to: Atom, offset: int, order: float = 1.0, stereo: int = 0) -> void:
 	start_atom = from
 	end_atom = to
 	offset_idx = offset
 	bond_order = order
+	match stereo:
+		1:
+			self.stereo = LineType.WEDGE
+		2:
+			self.stereo = LineType.DASH
+		_:
+			self.stereo = LineType.NONE
 
 func _ready() -> void:
 	start.default_color = start_atom.get_color()
@@ -44,6 +57,9 @@ func setup_line() -> void:
 	end.clear_points()
 	end.add_point(midpoint + perp_offset)
 	end.add_point(end_atom.position - uv * end_radius + perp_offset)
+	
+	debug_label.position = midpoint
+	debug_label.text = str(stereo)
 
 func _process(_delta: float) -> void:
 	#self.points = [
