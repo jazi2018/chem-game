@@ -1,5 +1,7 @@
 extends Node2D
 
+#temporary test string
+var smiles: String = "CN(CC#C)C(=O)CCNC1=NC2=C(C(=C(C=C2C(=N1)N3CCN(CC3)C(=O)C=C)Cl)C4=C(C=CC=C4F)O)F"
 @onready var http = $HTTPRequest
 @onready var molecule_root = $MoleculeRoot
 
@@ -9,10 +11,16 @@ extends Node2D
 @export var bond_scene: PackedScene
 
 func _ready() -> void:
-	#TEMP SMILES TEST
-	var body = JSON.stringify({"smiles": "C([C@@H]1[C@H]([C@@H]([C@H](C(O1)O)O)O)O)O"})
+	#make request only temporarily here - eventually game controller will call make_request and update_smiles
+	make_request()
+
+func make_request() -> void:
+	var body = JSON.stringify({"smiles": self.smiles})
 	var headers = ["Content-Type: application/json"]
-	http.request("http://127.0.0.1:8000/parse", headers, HTTPClient.METHOD_POST, body) 
+	http.request("http://127.0.0.1:8000/parse", headers, HTTPClient.METHOD_POST, body)
+
+func update_smiles(new_smiles: String) -> void:
+	self.smiles = new_smiles
 
 func _on_httprequest_request_completed(_result: int, response_code: int,
 _headers: PackedStringArray, body: PackedByteArray) -> void:
