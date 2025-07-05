@@ -24,13 +24,13 @@ to maintain a high degree of chemical accuracy (after all - the game is meant to
 All other functionality is / will be done locally within the Godot engine.
 
 ## TODO
-- Implement Atom and Bond node for better visuals and more extensible code
-	- Atom node functionality:
+- ~~Implement Atom and Bond node for better visuals and more extensible code~~
+	- ~~Atom node functionality~~:
 		- ~~Extends Node2D - relative position is important~~
 		- ~~Visual clarity~~
 		- Animations
 		- ~~Varying colors for different elements~~
-	- Bond node functionality:
+	- ~~Bond node functionality~~:
 		- ~~Extends Line2D~~
 		- ~~Connected to neigboring atoms~~
 		- ~~Remains connected when atom moves (for animations)~~
