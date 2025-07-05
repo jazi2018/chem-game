@@ -13,12 +13,12 @@ This game uses various python libraries to enable certain functionalities.
 - [uvicorn](https://www.uvicorn.org/)
 
 The most central among these is RDKit. It enables the utilization of SMILES to both visualize
-and manipulate molecules in a way that is mostly accurate to organic chemistry taught in college.
+and manipulate molecules in a way that is mostly accurate to organic chemistry classes.
 
 FastAPI and uvicorn allow the RDKit script to be run on a local server, which enables Godot (through the
 HTTPNode) to interface with it and thus utilize its functionality.
 
-This local server and RDKit exist only for the computational logic that is present in the game, in order
+This local server and RDKit exist only for the computational and rendering logic that is present in the game, in order
 to maintain a high degree of chemical accuracy (after all - the game is meant to be educational)
 
 All other functionality is / will be done locally within the Godot engine.
@@ -34,7 +34,7 @@ All other functionality is / will be done locally within the Godot engine.
 		- ~~Extends Line2D~~
 		- ~~Connected to neigboring atoms~~
 		- ~~Remains connected when atom moves (for animations)~~
-		- Eventually need to implement stereochemistry (can just adjust thickness over length for wedge)
+		- ~~Eventually need to implement stereochemistry (can just adjust thickness over length for wedge)~~
 		- ~~Implement double / triple bonds~~
 	- Children of MoleculeRoot, which should ~~act as a container for atoms and bonds~~ and store SMILE for whole molecule
 - Implement chemical reactions

@@ -28,7 +28,7 @@ _headers: PackedStringArray, body: PackedByteArray) -> void:
 	#draw_molecule(data)
 	render_molecule(data["atoms"], data["bonds"])
 
-func render_molecule(atoms_data: Array, bonds_data: Array, scale: float = 40.0) -> void:
+func render_molecule(atoms_data: Array, bonds_data: Array, v_scale: float = 40.0) -> void:
 	# Clear any existing visuals
 	for child in molecule_root.get_children():
 		remove_child(child)
@@ -40,7 +40,7 @@ func render_molecule(atoms_data: Array, bonds_data: Array, scale: float = 40.0) 
 	for atom_info in atoms_data:
 		var idx: int = atom_info["index"]
 		var symbol: String = atom_info["symbol"]
-		var pos: Vector2 = Vector2(atom_info["x"], -atom_info["y"]) * scale
+		var pos: Vector2 = Vector2(atom_info["x"], -atom_info["y"]) * v_scale
 		
 		var atom = atom_scene.instantiate() as Node2D
 		atom.position = pos

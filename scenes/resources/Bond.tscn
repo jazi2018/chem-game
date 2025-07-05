@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://boy0ncxheqj6y"]
+[gd_scene load_steps=3 format=3 uid="uid://boy0ncxheqj6y"]
 
 [ext_resource type="Script" uid="uid://c3sdk56s03cqh" path="res://scripts/bond.gd" id="1_i72gj"]
+[ext_resource type="Texture2D" uid="uid://bqqxgj8o0q8nx" path="res://textures/dash-tex-2.png" id="2_2flmh"]
 
 [node name="Bond" type="Node2D"]
 script = ExtResource("1_i72gj")
+dash_texture = ExtResource("2_2flmh")
 
 [node name="Start" type="Line2D" parent="."]
 width = 3.0
@@ -11,6 +13,7 @@ texture_mode = 1
 
 [node name="End" type="Line2D" parent="."]
 width = 3.0
+texture_mode = 1
 
 [node name="stereochem_debug" type="Label" parent="."]
 offset_right = 40.0

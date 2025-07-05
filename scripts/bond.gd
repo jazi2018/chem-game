@@ -6,21 +6,19 @@ var offset_idx: int = 0
 var bond_order: float = 1.0
 var stereo: LineType = LineType.NONE
 enum LineType {NONE, WEDGE, DASH}
+
 @onready var start: Line2D = $Start
 @onready var end: Line2D = $End
 
-#DEBUG
-@onready var debug_label: Label = $stereochem_debug
-#DEBUG
-
 @export var spacing: float = 6.0
+@export var dash_texture: Texture
 
-func setup(from: Atom, to: Atom, offset: int, order: float = 1.0, stereo: int = 0) -> void:
+func setup(from: Atom, to: Atom, offset: int, order: float = 1.0, ster: int = 0) -> void:
 	start_atom = from
 	end_atom = to
 	offset_idx = offset
 	bond_order = order
-	match stereo:
+	match ster:
 		1:
 			self.stereo = LineType.WEDGE
 		2:
@@ -31,6 +29,24 @@ func setup(from: Atom, to: Atom, offset: int, order: float = 1.0, stereo: int = 
 func _ready() -> void:
 	start.default_color = start_atom.get_color()
 	end.default_color = end_atom.get_color()
+	#create wedge shape
+	if self.stereo == LineType.WEDGE or self.stereo == LineType.DASH:
+		#setup curves
+		var start_curve := Curve.new()
+		start_curve.add_point(Vector2(0, 0.3))
+		start_curve.add_point(Vector2(1, 0.7))
+		var end_curve := Curve.new()
+		end_curve.add_point(Vector2(0, 0.7))
+		end_curve.add_point(Vector2(1, 1))
+		#assign curves
+		start.width = 10.0
+		start.width_curve = start_curve
+		end.width = 10.0
+		end.width_curve = end_curve
+	#assign texture if necessary
+	if self.stereo == LineType.DASH:
+		start.texture = dash_texture
+		end.texture = dash_texture
 	setup_line()
 
 func setup_line() -> void:
@@ -57,9 +73,6 @@ func setup_line() -> void:
 	end.clear_points()
 	end.add_point(midpoint + perp_offset)
 	end.add_point(end_atom.position - uv * end_radius + perp_offset)
-	
-	debug_label.position = midpoint
-	debug_label.text = str(stereo)
 
 func _process(_delta: float) -> void:
 	#self.points = [
